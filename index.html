@@ -241,11 +241,58 @@ aside{background:#171a1f;border-left:1px solid var(--line)}aside li{border-botto
   -webkit-backdrop-filter: blur(8px);
 }
 
+/* ===== PIXEL HARBOR CHARCOAL + ORANGE THEME ===== */
+:root{--bg:#4b3b37;--surface:#171a1f;--ink:#f5f5f5;--muted:#a6a8ad;--line:#2b2e34;--accent:#e99527;--accent-ink:#171717;--sun:#e99527}
+html,body{background:var(--bg)!important;color:var(--ink)!important}
+body{font-family:Figtree,system-ui,sans-serif}
+header{max-width:1320px;margin:18px auto 0;padding:18px 28px;background:#171a1f!important;border:1px solid #2b2e34!important;border-radius:18px 18px 0 0;gap:14px}
+.logo{color:#fff!important;text-decoration:none!important;font-size:1.2rem}
+.logo span{background:transparent!important;color:var(--accent)!important;padding:0!important}
+.nav a{color:#b7b9be!important}.nav a:hover{color:var(--accent)!important}
+#q{background:#23262c!important;border:1px solid #343840!important;color:#fff!important;border-radius:10px}
+main{max-width:1320px;margin:0 auto;padding:28px;background:#171a1f;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:26px;align-items:start}
+#hero{grid-column:1/-1;min-width:0;margin:0 0 28px}
+#chips{grid-column:1;grid-row:2;display:flex;flex-direction:column;align-items:stretch;gap:8px;margin:0;padding:18px;background:#23262c;border:1px solid #343840;border-radius:16px;min-width:0}
+#chips:before{content:'CATEGORIES';font-size:.8rem;font-weight:800;letter-spacing:.12em;color:#fff;margin:0 0 6px}
+#chips .chip{display:block;width:100%;text-align:left;background:transparent!important;color:#b7b9be!important;border:0!important;border-radius:9px;padding:9px 11px;text-decoration:none}
+#chips .chip:hover{background:#30333a!important;color:#fff!important}
+#chips .chip[aria-pressed="true"]{background:var(--accent)!important;color:#171717!important;font-weight:800}
+#sections{grid-column:2;grid-row:2;min-width:0}
+#sections>section{margin-top:0;margin-bottom:34px}
+#sections h2{color:#fff;font-size:1.35rem;margin-bottom:16px}
+.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.card{background:#25272c!important;border:1px solid #343840!important;border-radius:16px!important;box-shadow:0 5px 18px rgba(0,0,0,.22)!important;overflow:hidden;min-width:0;transition:transform .2s,border-color .2s}
+.card:hover{transform:translateY(-4px);border-color:#555!important}
+.cover{height:210px;position:relative;overflow:hidden;padding:0!important;background-position:center!important;background-size:cover!important}
+.cover.imgc{height:210px!important;display:block!important;background:#101217!important}
+.cover.imgc img{width:100%!important;height:100%!important;object-fit:cover!important}
+.card>.cover .badge{position:absolute!important;top:12px!important;left:12px!important;right:auto!important;bottom:auto!important;display:inline-flex!important;width:max-content!important;max-width:calc(100% - 24px)!important;height:auto!important;padding:6px 10px!important;background:rgba(15,18,24,.88)!important;color:#fff!important;border:1px solid rgba(255,255,255,.2)!important;border-radius:8px!important;font:800 11px/1 Figtree,Arial,sans-serif!important;letter-spacing:.09em;text-transform:uppercase!important;transform:none!important;writing-mode:horizontal-tb!important;z-index:3}
+.card .in{padding:14px!important;gap:7px!important}
+.card h3{font-family:Figtree,system-ui,sans-serif!important;font-size:1rem!important;font-weight:700!important;line-height:1.35!important;color:#fff!important}
+.card .tl{color:#fff!important}
+.meta{color:#a6a8ad!important}
+.card-price-line{margin:5px 0 3px!important;padding:10px 12px!important;background:#171a1f!important;border:1px solid #343840!important;border-radius:10px!important}
+.card-price-line .price,.card .price{color:var(--accent)!important;font-size:1.2rem!important;font-weight:800!important}
+.btn{background:var(--accent)!important;border:1px solid var(--accent)!important;color:#171717!important;border-radius:9px!important;font-weight:800!important}
+.btn.alt{background:transparent!important;border:1px solid #42454c!important;color:#fff!important}
+.chip{border-color:#343840}
+#detail{grid-column:1/-1;min-width:0}
+#detail .det{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+#detail .big{border:1px solid #343840!important;box-shadow:none!important;border-radius:16px!important;overflow:hidden}
+#detail .info{background:#23262c;border:1px solid #343840;border-radius:16px;padding:22px}
+#detail .info h1{color:#fff}
+.faq{max-width:1320px;margin:0 auto;padding:32px 28px 42px;background:#202227;color:#f5f5f5}
+.faq h2{margin-bottom:18px}.faq details{padding:14px 0;border-bottom:1px solid #343840}.faq summary{cursor:pointer;font-weight:700}.faq p{color:#b7b9be}
+.foot2{max-width:1320px;margin:0 auto;background:#171a1f!important;border-top:1px solid #343840!important;color:#b7b9be;padding:22px 28px;display:flex;gap:18px;flex-wrap:wrap}
+.foot2 a{color:#e99527}
+.ai-panel{background:#202227!important;border-color:#343840!important;box-shadow:0 10px 35px #0008!important}.ai-head,.ai-in{border-color:#343840!important}.ai-in input{background:#171a1f!important;border-color:#343840!important}
+@media(max-width:1000px){header{margin:0;border-radius:0;position:relative}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:20px;column-gap:18px;grid-template-columns:190px minmax(0,1fr)}}
+@media(max-width:680px){header{padding:16px;gap:10px}main{display:flex;flex-direction:column;padding:16px;width:100%}#hero,#chips,#sections,#detail{width:100%}#chips{display:flex;flex-direction:row;flex-wrap:wrap;padding:12px;margin-bottom:22px}#chips:before{width:100%}#chips .chip{width:auto;flex:0 0 auto}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.cover,.cover.imgc{height:155px!important}.card .in{padding:10px!important}.card h3{font-size:.92rem!important}.card-price-line{padding:8px!important}.card-price-line .price{font-size:1.05rem!important}.foot .btns{display:flex;flex-wrap:wrap;gap:6px}.btn.small{padding:6px 8px;font-size:.78rem}#detail .det{grid-template-columns:1fr}#detail .big{min-height:260px!important}.faq{padding:26px 16px}.foot2{padding:20px 16px}}
+
 </style>
 </head>
-<script src="logo-menu-fix.js"></script>
 <body>
-<header><div class="logo"><span>Pixel</span> Harbor</div><nav class="nav" aria-label="Sections"><a href="#sec-PS5" data-nav="">PS5 games</a><a href="#sec-PS4" data-nav="">PS4 games</a><a href="#sec-PC" data-nav="">PC games</a><a href="#faq" data-nav="">How to order</a></nav><input id="q" type="search" placeholder="Search a game title" aria-label="Search games"><a class="btn alt" id="tgTop" href="https://t.me/+96181539212" target="_blank" rel="noopener" style="text-decoration:none">Telegram</a><a class="btn alt" id="waTop" href="https://wa.me/96181539212" target="_blank" rel="noopener" style="text-decoration:none">WhatsApp</a></header>
+<header><a href="#" class="logo" id="homeLogo" aria-label="Pixel Harbor home"><span>Pixel</span> Harbor</a><nav class="nav" aria-label="Sections"><a href="#sec-PS5" data-nav="">PS5 games</a><a href="#sec-PS4" data-nav="">PS4 games</a><a href="#sec-PC" data-nav="">PC games</a><a href="#faq" data-nav="">How to order</a></nav><input id="q" type="search" placeholder="Search a game title" aria-label="Search games"><a class="btn alt" id="tgTop" href="https://t.me/+96181539212" target="_blank" rel="noopener" style="text-decoration:none">Telegram</a><a class="btn alt" id="waTop" href="https://wa.me/96181539212" target="_blank" rel="noopener" style="text-decoration:none">WhatsApp</a></header>
 <main>
   <section class="hero" id="hero"></section>
   <div class="bar" id="chips" role="group" aria-label="Filter by genre"></div>
@@ -1535,6 +1582,7 @@ function openGame(sl,p){const g=GAMES.find(x=>slug(x)===sl);if(!g)return;if(!g.p
 $("#detail").innerHTML=`<button class="btn alt" data-back>← All games</button><div class="det"><div class="big${g.img?" imgc":""}" style="${g.img?"":"background:"+cover(g)}">${g.img?`<img src="${g.img}" alt="${esc(g.t)}">`:""}</div><div class="info"><h1>${esc(g.t)}</h1><div class="meta">${esc(g.g)}</div><div class="plats">${g.pl.map(x=>`<button class="chip" aria-pressed="${x===p}" data-open="${slug(g)}" data-plat="${x}">${x}</button>`).join("")}</div><div class="price">${pr!=null?money(pr):"Ask for price"}</div>${TERMS}<div class="qrs"><div><div class="qrbox">${qrSvg(buyUrl(g,p))}</div><p class="meta">WhatsApp</p></div><div><div class="qrbox">${qrSvg(tgUrl(g,p))}</div><p class="meta">Telegram</p></div></div><p class="meta">Scan a code with your phone. The app opens with a message ready: you want to buy this game and ask for the details.</p><div class="acts"><a class="btn" href="${esc(buyUrl(g,p))}" target="_blank" rel="noopener" style="text-decoration:none">Order on WhatsApp</a><a class="btn alt" href="${esc(tgUrl(g,p))}" target="_blank" rel="noopener" style="text-decoration:none">Order on Telegram</a></div></div></div>`;
 window.scrollTo(0,0)}
 function closeGame(){if($("#detail").hidden)return;$("#detail").hidden=true;["#hero","#chips","#sections"].forEach(q=>$(q).hidden=false)}
+document.addEventListener("DOMContentLoaded",()=>{const logo=$("#homeLogo");if(logo)logo.addEventListener("click",e=>{e.preventDefault();closeGame();if(location.hash)history.replaceState(null,"",location.pathname+location.search);window.scrollTo({top:0,behavior:"smooth"})})});
 document.addEventListener("click",e=>{if(e.target.closest("[data-nav]"))closeGame()});
 let slideTimer;
 function hero(){const SL=[['PS5','PlayStation 5 games','Explore the latest PS5 titles.'],['PS4','PlayStation 4 games','Find your next PS4 favorite.'],['PC','PC games','Big games for your computer.']];
