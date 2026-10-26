@@ -1488,6 +1488,9 @@ for(let i=0;i<ops.length;i+=400){const b=writeBatch(db);ops.slice(i,i+400).forEa
 login:(e,p)=>signInWithEmailAndPassword(auth,e,p),
 logout:()=>signOut(auth),
 onAuth:cb=>onAuthStateChanged(auth,cb)
-};
+}
+	<div id="game-catalog"></div>
+<script src="./games.js" defer></script>
 </script>
 </body></html>
+
