@@ -1455,7 +1455,7 @@ try{const r=await sample([{role:"user",content:rules+cat},...turns.slice(-8)],{c
 catch(e){turns.pop();b.textContent=e.code==="not_granted"?"The assistant needs permission to use Claude. Tap Open permissions, allow it, then reload the page.":e.code==="rate_limited"?"Too many questions. Please wait a moment.":"Sorry, the assistant is not available right now. You can chat with us on WhatsApp instead.";if(e.code==="not_granted"){const m=document.createElement("button");m.className="btn small";m.textContent="Open permissions";m.onclick=async()=>{try{const pm=await claude.use("permissions");if(pm)pm.manage()}catch(x){}};b.appendChild(document.createElement("br"));b.appendChild(m)}}
 busy=false};
 $("#aiSend").onclick=send;$("#aiQ").addEventListener("keydown",e=>{if(e.key==="Enter")send()})})()}
-hero();chips();grid();initAI();
+initAI();
 async function adminInit(){const box=$("#aibox");
 box.innerHTML=`<div class="ai-panel login" id="loginBox"><div class="ai-head"><strong>Owner login</strong></div><div class="ai-in" style="flex-direction:column"><input id="lgE" type="email" placeholder="Email" autocomplete="username" aria-label="Email"><input id="lgP" type="password" placeholder="Password" autocomplete="current-password" aria-label="Password"><button class="btn small" id="lgGo">Log in</button><span class="meta" id="lgMsg" role="status"></span></div></div>`;
 const t0=Date.now();while(!window.storeDB&&Date.now()-t0<10000)await new Promise(r=>setTimeout(r,100));
