@@ -327,6 +327,45 @@ main{max-width:1320px;margin:0 auto;padding:28px;background:#171a1f;display:grid
 </style>
 <style>.nav .ph-language{background:none;border:0;padding:0;cursor:pointer;font:inherit;display:inline-flex;align-items:center;color:#f39a24!important;font-weight:700;white-space:nowrap;border-left:1px solid #444;padding-left:14px}.nav .ph-language:hover,.nav .ph-language:focus-visible{color:#fff!important}</style>
 <style>html{overflow-anchor:none;scroll-behavior:auto!important}</style>
+<style>
+/* Pixel Harbor: game purchase-screen intro (local CSS/SVG effects). */
+#detail .det .big.ph-animated-cover{isolation:isolate;position:relative}
+#detail .det .big.ph-animated-cover>img{transform-origin:center 63%;will-change:transform}
+#detail .det .big.ph-animated-cover.ph-playing>img{animation:ph-game-cover-pop 4.4s cubic-bezier(.2,.65,.25,1) both}
+@keyframes ph-game-cover-pop{0%{transform:scale(.72) translateY(13%);filter:brightness(.55)}17%{transform:scale(1.06) translateY(-2%);filter:brightness(1.14)}35%{transform:scale(1.015);filter:brightness(1.03)}75%{transform:scale(1.045)}100%{transform:scale(1);filter:none}}
+.ph-game-scene{position:absolute;inset:0;pointer-events:none;z-index:3;overflow:hidden;opacity:0;--ph-scene-accent:#f39a24}
+.ph-playing .ph-game-scene{animation:ph-scene-life 4.4s ease both}
+@keyframes ph-scene-life{0%{opacity:0}8%,65%{opacity:1}100%{opacity:0}}
+.ph-game-scene::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 80%,transparent 25%,#10121999 95%),linear-gradient(0deg,#05070cd9,transparent 44%);mix-blend-mode:multiply}
+.ph-game-scene::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 25%,var(--ph-scene-accent) 49%,transparent 67%);opacity:.25;transform:translateX(-110%)}
+.ph-playing .ph-game-scene::after{animation:ph-game-sweep 1.7s .25s ease-out both}
+@keyframes ph-game-sweep{to{transform:translateX(110%)}}
+.ph-scene-type{position:absolute;left:8%;top:12%;font-size:clamp(9px,1.3vw,13px);font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#fff;background:#0d1119cc;padding:7px 10px;border-left:3px solid var(--ph-scene-accent);box-shadow:0 0 22px #0008}
+.ph-playing .ph-scene-type{animation:ph-label-enter .65s .2s both}
+.ph-effect{position:absolute;bottom:10%;left:50%;width:clamp(86px,24%,170px);height:auto;overflow:visible;filter:drop-shadow(0 0 13px var(--ph-scene-accent)) drop-shadow(0 9px 12px #000b);transform:translate(-50%,30%);opacity:0}
+.ph-playing .ph-effect{animation:ph-action-fx 3.2s .45s cubic-bezier(.18,.64,.25,1) both}
+@keyframes ph-action-fx{0%{opacity:0;transform:translate(-50%,80%) scale(.3) rotate(-24deg)}18%{opacity:1;transform:translate(-50%,-2%) scale(1.1) rotate(3deg)}65%{opacity:1;transform:translate(-50%,-28%) scale(.97) rotate(-4deg)}100%{opacity:0;transform:translate(-50%,-55%) scale(1.2)}}
+.ph-scene-football .ph-effect{--ph-scene-accent:#79ff82;left:36%}
+.ph-playing .ph-scene-football .ph-effect{animation:ph-kick-ball 3.3s .35s cubic-bezier(.2,.4,.45,1) both}
+@keyframes ph-kick-ball{0%{opacity:0;transform:translate(-120%,30%) scale(.55) rotate(0)}15%{opacity:1}60%{opacity:1;transform:translate(95%,-150%) scale(.95) rotate(410deg)}100%{opacity:0;transform:translate(190%,-125%) scale(.4) rotate(680deg)}}
+.ph-scene-basketball{--ph-scene-accent:#ff9b37}
+.ph-playing .ph-scene-basketball .ph-effect{animation:ph-ball-bounce 3.4s .2s both}
+@keyframes ph-ball-bounce{0%{opacity:0;transform:translate(-120%,60%) scale(.55)}18%{opacity:1;transform:translate(-50%,-100%) scale(.95) rotate(70deg)}36%{transform:translate(-10%,40%) scale(.95) rotate(140deg)}55%{transform:translate(35%,-110%) rotate(240deg)}80%{opacity:1;transform:translate(100%,-20%) rotate(350deg)}100%{opacity:0;transform:translate(110%,-100%) scale(.45) rotate(420deg)}}
+.ph-scene-racing,.ph-scene-city{--ph-scene-accent:#08d5ff}
+.ph-playing .ph-scene-racing .ph-effect,.ph-playing .ph-scene-city .ph-effect{animation:ph-drive 3.5s .3s both}
+@keyframes ph-drive{0%{opacity:0;transform:translate(-220%,35%) scale(.6)}15%{opacity:1}65%{opacity:1;transform:translate(110%,-24%) scale(1.15)}100%{opacity:0;transform:translate(240%,-55%) scale(.7)}}
+.ph-scene-horror{--ph-scene-accent:#c95cff}.ph-scene-horror .ph-effect{filter:drop-shadow(0 0 15px #b860ff)}
+.ph-scene-rpg{--ph-scene-accent:#8b7dff}.ph-scene-adventure{--ph-scene-accent:#6af5db}.ph-scene-shooter{--ph-scene-accent:#47e5ff}
+.ph-energy-line{position:absolute;bottom:0;height:2px;width:72%;background:linear-gradient(90deg,transparent,var(--ph-scene-accent),transparent);filter:drop-shadow(0 0 6px var(--ph-scene-accent));opacity:.75}
+.ph-playing .ph-energy-line{animation:ph-energy 2.5s .25s both}
+.ph-energy-line:nth-child(2){bottom:18%;width:90%;animation-delay:.5s}.ph-energy-line:nth-child(3){bottom:30%;width:48%;animation-delay:.8s}
+@keyframes ph-energy{0%{transform:translateX(-105%) skewX(-20deg);opacity:0}25%{opacity:.8}100%{transform:translateX(160%) skewX(-20deg);opacity:0}}
+@keyframes ph-label-enter{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:translateX(0)}}
+.ph-replay{position:absolute;top:12px;right:12px;z-index:6;background:#10131de8;border:1px solid #e99527;color:#ffe1a8;border-radius:999px;padding:6px 11px;font-size:12px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px #0007}
+.ph-replay:hover,.ph-replay:focus-visible{background:#e99527;color:#15191f}
+@media(prefers-reduced-motion:reduce){#detail .det .big.ph-animated-cover.ph-playing>img,.ph-playing .ph-game-scene,.ph-playing .ph-effect,.ph-playing .ph-energy-line,.ph-playing .ph-game-scene::after,.ph-playing .ph-scene-type{animation:none!important}.ph-game-scene{display:none}.ph-replay{display:none}}
+</style>
+<style>.ph-sports-player{position:absolute;bottom:6%;left:17%;width:35%;max-width:155px;opacity:0;filter:drop-shadow(0 7px 8px #0009)}.ph-playing .ph-sports-player{animation:ph-player-enter 3.9s .1s both}.ph-kick-leg{transform-origin:65px 94px;transform-box:view-box}.ph-playing .ph-kick-leg{animation:ph-kick 1.1s .3s both}@keyframes ph-player-enter{0%{opacity:0;transform:translate(-35%,40%) scale(.7)}16%,65%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(-8%,2%) scale(1)}}@keyframes ph-kick{0%{transform:rotate(15deg)}30%{transform:rotate(35deg)}60%{transform:rotate(-54deg)}100%{transform:rotate(0)}}@media(prefers-reduced-motion:reduce){.ph-playing .ph-sports-player,.ph-playing .ph-kick-leg{animation:none!important}}</style>
 </head>
 <body>
 <header><a href="#" class="logo" id="homeLogo" aria-label="Pixel Harbor home"><span>Pixel</span> Harbor</a><nav class="nav" aria-label="Sections"><a href="#sec-PS5" data-nav="">PS5 games</a><a href="#sec-PS4" data-nav="">PS4 games</a><a href="#sec-PC" data-nav="">PC games</a><a href="#faq" data-nav="">How to order</a></nav><input id="q" type="search" placeholder="Search a game title" aria-label="Search games"><a class="btn alt" id="tgTop" href="https://t.me/+96181539212" target="_blank" rel="noopener" style="text-decoration:none">Telegram</a><a class="btn alt" id="waTop" href="https://wa.me/96181539212" target="_blank" rel="noopener" style="text-decoration:none">WhatsApp</a></header>
@@ -1718,9 +1757,50 @@ document.addEventListener("click",function(e){
 });
 
 function trailer(g){const v=(g.v||"").trim();return /^https?:\/\//i.test(v)?v:"https://www.youtube.com/results?search_query="+encodeURIComponent(g.t+" official trailer")}
+
+function phGameAnimationProfile(g){
+ const t=g.t.toLowerCase(),genre=String(g.g||"").toLowerCase();
+ if(/\bfc\s*\d|fifa|football|efootball/.test(t))return "football";
+ if(/nba|basketball/.test(t))return "basketball";
+ if(/grand theft auto|\bgta\b/.test(t))return "city";
+ if(genre==="racing"||/forza|gran turismo|need for speed|snowrunner/.test(t))return "racing";
+ if(genre==="horror"||/silent hill|resident evil|outlast/.test(t))return "horror";
+ if(genre==="rpg"||/elden ring|dark souls|witcher/.test(t))return "rpg";
+ if(genre==="adventure")return "adventure";
+ if(genre==="shooter")return "shooter";
+ return "action";
+}
+const PH_EFFECT_SVGS={
+ football:'<circle cx="50" cy="50" r="40" fill="#f7fafc" stroke="#152331" stroke-width="3"/><path fill="#121b2d" d="M50 31l18 13-7 21H39l-7-21zM45 10l-14 9-8 17-12 4A40 40 0 0 1 45 10m10 0 14 9 8 17 12 4A40 40 0 0 0 55 10M12 60l16 3 12 15-3 10A40 40 0 0 1 12 60m76 0-16 3-12 15 3 10A40 40 0 0 0 88 60"/><path d="M50 10v21M32 44l-19-4m55 4 19-4M39 65 29 83m32-18 10 18" stroke="#152331" stroke-width="2.5" fill="none"/>',
+ basketball:'<circle cx="50" cy="50" r="40" fill="#f7922e" stroke="#351913" stroke-width="4"/><path d="M10 50h80M50 10v80M21 22c35 13 38 43 0 56m58-56c-35 13-38 43 0 56" fill="none" stroke="#351913" stroke-width="4"/>',
+ racing:'<path d="M9 68l7-21 16-5 14-21h27l18 22 5 5v23H8z" fill="#eaf6ff" stroke="#08222f" stroke-width="3"/><path d="M45 25h24l15 19H33z" fill="#103b5e"/><path d="M11 56h19M75 56h16" stroke="#30d8ff" stroke-width="6"/><circle cx="25" cy="72" r="12" fill="#111722" stroke="#57c8fa" stroke-width="3"/><circle cx="78" cy="72" r="12" fill="#111722" stroke="#57c8fa" stroke-width="3"/>',
+ city:'<path d="M7 70h86v5H7zM12 65V37h14v28m6 0V20h15v45m5 0V9h14v56m6 0V30h15v35" fill="#bf69ff" stroke="#e5caff" stroke-width="2"/><path d="M6 85h88M18 91h64" stroke="#ffb15a" stroke-width="4" stroke-linecap="round"/>',
+ horror:'<path d="M10 49c25-30 55-30 80 0-25 30-55 30-80 0z" fill="#100d1c" stroke="#c388ff" stroke-width="3"/><ellipse cx="50" cy="49" rx="12" ry="20" fill="#f1c5ff"/><ellipse cx="50" cy="49" rx="4" ry="13" fill="#1c102a"/><path d="M19 78l12-9m39 0 12 9" stroke="#a56aff" stroke-width="3"/>',
+ rpg:'<circle cx="50" cy="50" r="42" fill="#463b9538" stroke="#c4b8ff" stroke-width="2"/><path d="M50 10 84 70H16zM50 90 16 30h68z" fill="none" stroke="#c8b8ff" stroke-width="2.5"/><circle cx="50" cy="50" r="13" fill="#eedaff"/><path d="M50 0v17M50 83v17M0 50h17m66 0h17" stroke="#f4dfff" stroke-width="3"/>',
+ adventure:'<circle cx="50" cy="50" r="39" fill="#053b40" stroke="#6af5db" stroke-width="3"/><path d="M50 8v12m0 60v12M8 50h12m60 0h12" stroke="#b7fff1" stroke-width="4"/><path d="m71 29-11 31-31 11 11-31z" fill="#d5fff7" stroke="#5af2cf" stroke-width="3"/><path d="m50 50 21-21-11 31z" fill="#f5bb53"/>',
+ shooter:'<path d="M12 69 39 12 57 45h31L62 88 47 60z" fill="#61ecff" stroke="#d6faff" stroke-width="2"/><path d="M8 79h35M57 23h35M16 29h18" stroke="#b4faff" stroke-width="4" stroke-linecap="round"/>',
+ action:'<path d="M50 5 59 38 93 28 70 51 93 75 59 66 50 96 40 65 6 76 30 51 6 29 40 38z" fill="#f5ab38" stroke="#ffedaf" stroke-width="3"/><circle cx="50" cy="50" r="10" fill="#fff1bb"/>'
+};
+const PH_SPORTS_PLAYER='<svg class="ph-sports-player" viewBox="0 0 120 150" aria-hidden="true"><circle cx="59" cy="19" r="12" fill="#e3b59a"/><path d="M43 38 59 31 79 42 73 80 44 80Z" fill="#f6fafc" stroke="#18263d" stroke-width="3"/><path d="M45 40 25 61 14 47M77 43l16 16 14-19" stroke="#e7b99e" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M45 76h27l4 19H43Z" fill="#263c66"/><path d="M51 94 39 124 19 134" stroke="#e8bba0" stroke-width="10" fill="none" stroke-linecap="round"/><g class="ph-kick-leg"><path d="M65 94 82 117 104 122" stroke="#e8bba0" stroke-width="10" fill="none" stroke-linecap="round"/><path d="M104 122l12 4" stroke="#07111f" stroke-width="10" stroke-linecap="round"/></g><path d="m19 134-12 4" stroke="#07111f" stroke-width="10" stroke-linecap="round"/><path d="M48 12q11-12 24 2l-1 6-21-1z" fill="#17202a"/><text x="60" y="60" font-size="15" fill="#192943" text-anchor="middle" font-weight="bold">7</text></svg>';
+function phInstallGameIntro(g){
+ const panel=$("#detail .det .big");
+ if(!panel)return;
+ panel.classList.add("ph-animated-cover");
+ const profile=phGameAnimationProfile(g);
+ const scene=document.createElement("div");scene.className="ph-game-scene ph-scene-"+profile;scene.setAttribute("aria-hidden","true");
+ scene.innerHTML='<span class="ph-energy-line"></span><span class="ph-energy-line"></span><span class="ph-energy-line"></span><svg class="ph-effect" viewBox="0 0 100 100" aria-hidden="true">'+PH_EFFECT_SVGS[profile]+'</svg>'+(profile==='football'?PH_SPORTS_PLAYER:'');
+ panel.appendChild(scene);
+ const replay=document.createElement("button");replay.type="button";replay.className="ph-replay";replay.textContent=PH_GEORGIAN?"↻ გამეორება":"↻ Replay";replay.setAttribute("aria-label",PH_GEORGIAN?"ანიმაციის გამეორება":"Replay animation");
+ panel.appendChild(replay);
+ let timer;
+ const play=()=>{clearTimeout(timer);panel.classList.remove("ph-playing");void panel.offsetWidth;panel.classList.add("ph-playing");timer=setTimeout(()=>panel.classList.remove("ph-playing"),4600)};
+ replay.addEventListener("click",play);play();
+}
+
 function openGame(sl,p){const g=GAMES.find(x=>slug(x)===sl);if(!g)return;if(!g.pl.includes(p))p=g.pl[0];const pr=price(g,p);
 ["#hero","#chips","#sections"].forEach(q=>$(q).hidden=true);$("#detail").hidden=false;
 $("#detail").innerHTML=`<button class="btn alt" data-back>← All games</button><div class="det"><div class="big${g.img?" imgc":""}" style="${g.img?"":"background:"+cover(g)}">${g.img?`<img src="${esc(g.img)}" alt="${esc(g.t)}" loading="lazy" decoding="async" referrerpolicy="no-referrer">`:`<span class="cover-fallback-title">${esc(g.t)}</span>`}</div><div class="info"><h1>${esc(g.t)}</h1><div class="meta">${esc(g.g)}</div><div class="plats">${g.pl.map(x=>`<button class="chip" aria-pressed="${x===p}" data-open="${slug(g)}" data-plat="${x}">${x}</button>`).join("")}</div><div class="price">${pr!=null?money(pr):"Ask for price"}</div>${TERMS}<div class="qrs"><div><div class="qrbox">${qrSvg(buyUrl(g,p))}</div><p class="meta">WhatsApp</p></div><div><div class="qrbox">${qrSvg(tgUrl(g,p))}</div><p class="meta">Telegram</p></div></div><p class="meta">Scan a code with your phone. The app opens with a message ready: you want to buy this game and ask for the details.</p><div class="acts"><a class="btn" href="${esc(buyUrl(g,p))}" target="_blank" rel="noopener" style="text-decoration:none">Order on WhatsApp</a><a class="btn alt" href="${esc(tgUrl(g,p))}" target="_blank" rel="noopener" style="text-decoration:none">Order on Telegram</a></div></div></div>`;
+phInstallGameIntro(g);
 $("#detail").insertAdjacentHTML("beforeend",trailerPanel(g));
 window.scrollTo(0,0)}
 function closeGame(){if($("#detail").hidden)return;$("#detail").hidden=true;$("#detail").innerHTML="";["#hero","#chips","#sections"].forEach(q=>$(q).hidden=false)}
