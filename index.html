@@ -394,6 +394,7 @@ main{max-width:1320px;margin:0 auto;padding:28px;background:#171a1f;display:grid
 .ph-popup-title{position:absolute;left:14px;right:14px;bottom:21px;z-index:3;text-align:center;color:#fff;font-weight:900;font-size:clamp(18px,5vw,27px);line-height:1.17;text-shadow:0 2px 7px #000;overflow-wrap:anywhere}
 @media(prefers-reduced-motion:reduce){#ph-game-popup,.ph-popup-card,.ph-popup-art img,.ph-popup-effects i,.ph-popup-icon,.ph-popup-football .ph-popup-icon,.ph-popup-football .ph-sports-player,.ph-popup-football .ph-kick-leg{animation:none!important}.ph-popup-football .ph-sports-player{opacity:1}.ph-popup-effects i{display:none}}
 </style>
+<style>.ph-stock-badge{display:inline-flex;width:max-content;max-width:100%;font-size:.85rem;font-weight:800;padding:5px 11px;border:1px solid #ff5c5c77;border-radius:6px;background:#581d24;color:#ffbfc2;margin-top:7px}.ph-stock-unavailable{padding:11px 12px;border:1px solid #f35b5b55;background:#40242a;color:#ffc6c6;border-radius:9px;font-size:.85rem;font-weight:700;line-height:1.35}.card-price-line{flex-wrap:wrap}</style>
 </head>
 <body>
 <header><a href="#" class="logo" id="homeLogo" aria-label="Pixel Harbor home"><span>Pixel</span> Harbor</a><nav class="nav" aria-label="Sections"><a href="#sec-PS5" data-nav="">PS5 games</a><a href="#sec-PS4" data-nav="">PS4 games</a><a href="#sec-PC" data-nav="">PC games</a><a href="#faq" data-nav="">How to order</a></nav><input id="q" type="search" placeholder="Search a game title" aria-label="Search games"><a class="btn alt" id="tgTop" href="https://t.me/+96181539212" target="_blank" rel="noopener" style="text-decoration:none">Telegram</a><a class="btn alt" id="waTop" href="https://wa.me/96181539212" target="_blank" rel="noopener" style="text-decoration:none">WhatsApp</a></header>
@@ -482,7 +483,32 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 const GAMES=JSON.parse($("#gamesdata").textContent);
 GAMES.forEach(g=>{g.pp=g.pp||{};g.dd=g.dd||{};if(g.p!=null)g.pl.forEach(x=>{if(g.pp[x]==null)g.pp[x]=g.p});delete g.p;if(g.d)g.pl.forEach(x=>{if(!g.dd[x])g.dd[x]=g.d});delete g.d});
 const uid=()=>Math.random().toString(36).slice(2,12);GAMES.forEach(g=>{if(!g.id)g.id=uid()});
-const price=(g,p)=>g.pp[p]??null;
+let PH_SUPPLIER_SYNC=new Map(),phActiveListing=null;
+const phSyncKey=(title,platform)=>supplierKey(title)+"|"+platform;
+function phSyncRecord(g,p){return PH_SUPPLIER_SYNC.get(phSyncKey(g.t,p));}
+const price=(g,p)=>phSyncRecord(g,p)?.retailUsd??g.pp[p]??null;
+const phOutOfStock=(g,p)=>phSyncRecord(g,p)?.stock==="out_of_stock";
+const phStockText=()=>PH_GEORGIAN?"მარაგში არ არის":"Out of stock";
+const phStockBadge=(g,p)=>phOutOfStock(g,p)?'<span class="ph-stock-badge" role="status">'+phStockText()+'</span>':"";
+const phUnavailable=()=>'<div class="ph-stock-unavailable">'+phStockText()+' · '+(PH_GEORGIAN?"შეკვეთა დროებით მიუწვდომელია":"Ordering temporarily unavailable")+'</div>';
+async function phLoadSupplierSync(){
+ try{
+  const response=await fetch(new URL("supplier-sync.json",location.href),{cache:"no-cache"});
+  if(!response.ok)return;const data=await response.json();
+  if(data.schema!==1||!Array.isArray(data.records))return;
+  const verified=new Map();
+  for(const r of data.records){
+   if(typeof r.title!=="string"||!["PS5","PS4","PC"].includes(r.platform)||!["in_stock","out_of_stock"].includes(r.stock))continue;
+   if(!(Number.isFinite(r.retailUsd)&&r.retailUsd>0)&&!(r.stock==="out_of_stock"&&r.retailUsd===null))continue;
+   verified.set(phSyncKey(r.title,r.platform),r);
+  }
+  PH_SUPPLIER_SYNC=verified;
+  if(!editing){
+   if(phActiveListing&&!$("#detail").hidden){const {sl,p}=phActiveListing;openGame(sl,p,false)}
+   else{hero();chips();grid()}
+  }
+ }catch(e){/* Keep the existing catalog if the sync data is temporarily unavailable. */}
+}
 const keep=(o,pl)=>Object.fromEntries(pl.filter(x=>o[x]!=null&&o[x]!=="").map(x=>[x,o[x]]));
 const hue=t=>{let h=0;for(const c of t)h=(h*31+c.charCodeAt(0))%360;return h};
 let genre="All",editing=false;
@@ -1827,21 +1853,21 @@ function phShowGameIntro(g){
  panel.append(art,effects,brand,title);popup.appendChild(panel);document.body.appendChild(popup);
  phPopupTimer=setTimeout(()=>popup.remove(),3000);
 }
-function phInstallGameIntro(g){
+function phInstallGameIntro(g,autoPlay=true){
  const panel=$("#detail .det .big");if(!panel)return;
  const replay=document.createElement("button");replay.type="button";replay.className="ph-replay";replay.textContent=PH_GEORGIAN?"↻ გამეორება":"↻ Replay";
  replay.setAttribute("aria-label",PH_GEORGIAN?"ანიმაციის გამეორება":"Replay animation");
  replay.addEventListener("click",()=>phShowGameIntro(g));
- panel.appendChild(replay);phShowGameIntro(g);
+ panel.appendChild(replay);if(autoPlay)phShowGameIntro(g);
 }
 
-function openGame(sl,p){const g=GAMES.find(x=>slug(x)===sl);if(!g)return;if(!g.pl.includes(p))p=g.pl[0];const pr=price(g,p);
+function openGame(sl,p,autoPlay=true){const g=GAMES.find(x=>slug(x)===sl);if(!g)return;if(!g.pl.includes(p))p=g.pl[0];const pr=price(g,p);phActiveListing={sl,p};
 ["#hero","#chips","#sections"].forEach(q=>$(q).hidden=true);$("#detail").hidden=false;
-$("#detail").innerHTML=`<button class="btn alt" data-back>← All games</button><div class="det"><div class="big${g.img?" imgc":""}" style="${g.img?"":"background:"+cover(g)}">${g.img?`<img src="${esc(g.img)}" alt="${esc(g.t)}" loading="lazy" decoding="async" referrerpolicy="no-referrer">`:`<span class="cover-fallback-title">${esc(g.t)}</span>`}</div><div class="info"><h1>${esc(g.t)}</h1><div class="meta">${esc(g.g)}</div><div class="plats">${g.pl.map(x=>`<button class="chip" aria-pressed="${x===p}" data-open="${slug(g)}" data-plat="${x}">${x}</button>`).join("")}</div><div class="price">${pr!=null?money(pr):"Ask for price"}</div>${TERMS}<div class="qrs"><div><div class="qrbox">${qrSvg(buyUrl(g,p))}</div><p class="meta">WhatsApp</p></div><div><div class="qrbox">${qrSvg(tgUrl(g,p))}</div><p class="meta">Telegram</p></div></div><p class="meta">Scan a code with your phone. The app opens with a message ready: you want to buy this game and ask for the details.</p><div class="acts"><a class="btn" href="${esc(buyUrl(g,p))}" target="_blank" rel="noopener" style="text-decoration:none">Order on WhatsApp</a><a class="btn alt" href="${esc(tgUrl(g,p))}" target="_blank" rel="noopener" style="text-decoration:none">Order on Telegram</a></div></div></div>`;
-phInstallGameIntro(g);
+$("#detail").innerHTML=`<button class="btn alt" data-back>← All games</button><div class="det"><div class="big${g.img?" imgc":""}" style="${g.img?"":"background:"+cover(g)}">${g.img?`<img src="${esc(g.img)}" alt="${esc(g.t)}" loading="lazy" decoding="async" referrerpolicy="no-referrer">`:`<span class="cover-fallback-title">${esc(g.t)}</span>`}</div><div class="info"><h1>${esc(g.t)}</h1><div class="meta">${esc(g.g)}</div><div class="plats">${g.pl.map(x=>`<button class="chip" aria-pressed="${x===p}" data-open="${slug(g)}" data-plat="${x}">${x}</button>`).join("")}</div><div class="price">${pr!=null?money(pr):"Ask for price"}</div>${phStockBadge(g,p)}${TERMS}${phOutOfStock(g,p)?phUnavailable():`<div class="qrs"><div><div class="qrbox">${qrSvg(buyUrl(g,p))}</div><p class="meta">WhatsApp</p></div><div><div class="qrbox">${qrSvg(tgUrl(g,p))}</div><p class="meta">Telegram</p></div></div><p class="meta">Scan a code with your phone. The app opens with a message ready: you want to buy this game and ask for the details.</p><div class="acts"><a class="btn" href="${esc(buyUrl(g,p))}" target="_blank" rel="noopener" style="text-decoration:none">Order on WhatsApp</a><a class="btn alt" href="${esc(tgUrl(g,p))}" target="_blank" rel="noopener" style="text-decoration:none">Order on Telegram</a></div>`}</div></div>`;
+phInstallGameIntro(g,autoPlay);
 $("#detail").insertAdjacentHTML("beforeend",trailerPanel(g));
-window.scrollTo(0,0)}
-function closeGame(){phCloseGameIntro();if($("#detail").hidden)return;$("#detail").hidden=true;$("#detail").innerHTML="";["#hero","#chips","#sections"].forEach(q=>$(q).hidden=false)}
+if(autoPlay)window.scrollTo(0,0)}
+function closeGame(){phActiveListing=null;phCloseGameIntro();if($("#detail").hidden)return;$("#detail").hidden=true;$("#detail").innerHTML="";["#hero","#chips","#sections"].forEach(q=>$(q).hidden=false)}
 document.addEventListener("DOMContentLoaded",()=>{const logo=$("#homeLogo");if(logo)logo.addEventListener("click",e=>{e.preventDefault();closeGame();if(location.hash)history.replaceState(null,"",location.pathname+location.search);window.scrollTo({top:0,behavior:"smooth"})})});
 document.addEventListener("click",e=>{if(e.target.closest("[data-nav]"))closeGame()});
 let slideTimer;
@@ -1859,7 +1885,7 @@ $("#chips").innerHTML=SECS.map(([p,l])=>`<a class="chip" href="#sec-${p}">${l}</
 function grid(){const q=$("#q").value.trim().toLowerCase();let any=false;
 const html=SECS.map(([p,l])=>{const list=GAMES.filter(g=>g.pl.includes(p)&&(genre==="All"||g.g===genre)&&g.t.toLowerCase().includes(q));
 if(!list.length)return "";any=true;
-return `<section id="sec-${p}"><h2>${l} <span class="meta">(${list.length})</span></h2><div class="grid">`+list.map(g=>`<article class="card"><div class="cover${g.img?" imgc":""}" data-open="${slug(g)}" data-plat="${p}" style="${g.img?"":"background:"+cover(g)+";"}cursor:pointer">${g.img?`<img src="${esc(g.img)}" alt="${esc(g.t)}" loading="lazy" decoding="async" referrerpolicy="no-referrer">`:`<span class="cover-fallback-title">${esc(g.t)}</span>`}<span class="badge">${p}</span></div><div class="in"><h3><a href="#g/${slug(g)}" data-open="${slug(g)}" data-plat="${p}" class="tl">${esc(g.t)}</a></h3><div class="meta">${esc(g.g)}</div><div class="card-price-line"><span class="price">${price(g,p)!=null?money(price(g,p)):"Ask for price"}</span></div><div class="foot"><span class="btns"><a class="btn small" ${wa(g,p)} style="text-decoration:none">${price(g,p)!=null?"Order on WhatsApp":"Ask on WhatsApp"}</a><a class="btn alt small" href="${esc(tgUrl(g,p))}" target="_blank" rel="noopener" style="text-decoration:none">Telegram</a></span></div></div></article>`).join("")+`</div></section>`}).join("");
+return `<section id="sec-${p}"><h2>${l} <span class="meta">(${list.length})</span></h2><div class="grid">`+list.map(g=>`<article class="card"><div class="cover${g.img?" imgc":""}" data-open="${slug(g)}" data-plat="${p}" style="${g.img?"":"background:"+cover(g)+";"}cursor:pointer">${g.img?`<img src="${esc(g.img)}" alt="${esc(g.t)}" loading="lazy" decoding="async" referrerpolicy="no-referrer">`:`<span class="cover-fallback-title">${esc(g.t)}</span>`}<span class="badge">${p}</span></div><div class="in"><h3><a href="#g/${slug(g)}" data-open="${slug(g)}" data-plat="${p}" class="tl">${esc(g.t)}</a></h3><div class="meta">${esc(g.g)}</div><div class="card-price-line"><span class="price">${price(g,p)!=null?money(price(g,p)):"Ask for price"}</span>${phStockBadge(g,p)}</div><div class="foot">${phOutOfStock(g,p)?phUnavailable():`<span class="btns"><a class="btn small" ${wa(g,p)} style="text-decoration:none">${price(g,p)!=null?"Order on WhatsApp":"Ask on WhatsApp"}</a><a class="btn alt small" href="${esc(tgUrl(g,p))}" target="_blank" rel="noopener" style="text-decoration:none">Telegram</a></span>`}</div></div></article>`).join("")+`</div></section>`}).join("");
 $("#sections").innerHTML=any?html:`<div class="empty">No games match your search. Try another title or genre.</div>`}
 const shrink=f=>new Promise(res=>{const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{const w=Math.min(800,im.width),h=Math.round(im.height*w/im.width),c=document.createElement("canvas");c.width=w;c.height=h;const x=c.getContext("2d");x.imageSmoothingQuality="high";x.drawImage(im,0,0,w,h);URL.revokeObjectURL(u);res(c.toDataURL("image/jpeg",.82))};im.src=u});
 function msg(t){$("#adminbar .st").textContent=t}
@@ -1998,7 +2024,7 @@ async function syncDB(){const t0=Date.now();while(!window.storeDB&&Date.now()-t0
 try{const d=await storeDB.load();if(d.length){d.forEach(g=>{g.pp=g.pp||{};g.dd=g.dd||{}});GAMES.length=0;GAMES.push(...d);mergeSupplierGames(GAMES,window.PIXEL_SUPPLIER_CATALOG);if(!editing&&$("#detail").hidden){hero();chips();grid()}}}catch(e){}}
 if(location.hash==="#admin")adminInit();
 window.addEventListener("hashchange",()=>{if(location.hash==="#admin"&&!$("#loginBox")&&!$("#editBtn"))adminInit()});
-syncDB();
+syncDB();phLoadSupplierSync();
 </script>
 
 
